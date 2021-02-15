@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FootballStatisticsArchive.Database\FootballStatisticsArchive.Database.csproj" />
+    <ProjectReference Include="..\FootballStatisticsArchive.Services\FootballStatisticsArchive.Services.csproj" />
+    <ProjectReference Include="..\FootballStatisticsArchive.Views\FootballStatisticsArchive.Views.csproj" />
+  </ItemGroup>
+
+
+</Project>

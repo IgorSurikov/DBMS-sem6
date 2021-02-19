@@ -1,7 +1,9 @@
-﻿namespace FootballStatisticsArchive.Database.Interfaces
+﻿using System.Collections.Generic;
+
+namespace FootballStatisticsArchive.Database.Interfaces
 {
     public interface IAccountReposetory
     {
-        public void Registration(string nickname, string email, string password);
+        public ICollection<object> Registration(string nickname, string email, string password);
     }
 }

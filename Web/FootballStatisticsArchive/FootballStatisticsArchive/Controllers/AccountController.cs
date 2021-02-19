@@ -17,7 +17,10 @@ namespace FootballStatisticsArchive.Web.Controllers
         [Route("register")]
         public IActionResult Registration([FromForm]RegistrationViewModel vm)
         {
-            this.accountService.Registration(vm.Nickname, vm.Email, vm.Password);
+            if(!this.accountService.Registration(vm.Nickname, vm.Email, vm.Password))
+            {
+                return BadRequest();
+            }
             return Ok();
         }
     }

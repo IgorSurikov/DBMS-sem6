@@ -67,10 +67,12 @@ namespace FootballStatisticsArchive.Database.Repositories
                                 Console.WriteLine("Database error: " + ex.Message.ToString());
                                 break;
                         }
+                        return null;
                     }
                     catch (Exception ex)
                     {
                         Console.WriteLine(ex.Message);
+                        return null;
                     }
                     finally
                     {

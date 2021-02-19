@@ -11,9 +11,9 @@ namespace FootballStatisticsArchive.Services.Services
         }
 
         private readonly IAccountReposetory accountRepository;
-        public void Registration(string nickname, string email, string password)
+        public bool Registration(string nickname, string email, string password)
         {
-            this.accountRepository.Registration(nickname, email, password);
+            return this.accountRepository.Registration(nickname, email, password) != null;
         }
     }
 }

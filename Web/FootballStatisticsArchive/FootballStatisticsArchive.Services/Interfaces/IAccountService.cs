@@ -2,6 +2,6 @@
 {
     public interface IAccountService
     {
-        public void Registration(string nickname, string email, string password);
+        public bool Registration(string nickname, string email, string password);
     }
 }

@@ -1,9 +1,11 @@
 ﻿using FootballStatisticsArchive.Database.Interfaces;
+using FootballStatisticsArchive.Database.Models;
 using Microsoft.Extensions.Configuration;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace FootballStatisticsArchive.Database.Repositories
 {
@@ -21,10 +23,10 @@ namespace FootballStatisticsArchive.Database.Repositories
             OracleConfiguration.WalletLocation = OracleConfiguration.TnsAdmin;
         }
 
-        public ICollection<object> RunDbRequest(string funckName, bool mustRespond=false, Tuple<string, OracleDbType, object>[] args=null, Tuple<string, OracleDbType, object> returnVal=null)
+        public DbOutput RunDbRequest(string funckName, bool mustRespond=false, Tuple<string, OracleDbType, object>[] args=null, Tuple<string, OracleDbType, object> returnVal=null)
         {
             string connectionString = $"User Id={this.configuration["Authentication:Login"]};Password={this.configuration["Authentication:Password"]};Data Source={this.configuration["Authentication:Schema"]};Connection Timeout=100;";
-            List<object> returnVals = null;
+            var returnVals = new DbOutput();
             using (var con = new OracleConnection(connectionString))
             {
                 using (OracleCommand cmd = con.CreateCommand())
@@ -40,39 +42,24 @@ namespace FootballStatisticsArchive.Database.Repositories
                         con.Open();
                         if (mustRespond)
                         {
-                            returnVals = new List<object>();
+                            returnVals.OutElements = new List<object>();
                             cmd.Parameters.Add(returnVal.Item1, returnVal.Item2).Direction = ParameterDirection.Output;
                             OracleDataReader rdr = cmd.ExecuteReader();
                             while (rdr.Read())
                             {
                                 for (int i = 0; i < rdr.FieldCount; i++)
                                 {
-                                    returnVals.Add(rdr[i]);
+                                    returnVals.OutElements.Add(rdr[i]);
                                 }
                             }
                         }
                         cmd.ExecuteNonQuery();
-                    }
-                    catch (OracleException ex)
-                    {
-                        switch (ex.Number)
-                        {
-                            case 1:
-                                Console.WriteLine("Error attempting to insert duplicate data.");
-                                break;
-                            case 12545:
-                                Console.WriteLine("The database is unavailable.");
-                                break;
-                            default:
-                                Console.WriteLine("Database error: " + ex.Message.ToString());
-                                break;
-                        }
-                        return null;
+                        returnVals.Result = DbResult.Successed;
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine(ex.Message);
-                        return null;
+                        returnVals.ErrorMessage = ex.Message.Split("\n").First().Split(":").Last().Remove(0, 1);
+                        returnVals.Result = DbResult.Faild;
                     }
                     finally
                     {

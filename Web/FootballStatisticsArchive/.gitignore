@@ -22,7 +22,6 @@ nupkg/
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
-**/wwwroot/Images/
 x64/
 x86/
 build/

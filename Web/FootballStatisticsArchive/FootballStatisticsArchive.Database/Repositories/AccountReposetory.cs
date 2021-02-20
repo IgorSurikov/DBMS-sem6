@@ -1,7 +1,7 @@
 ﻿using FootballStatisticsArchive.Database.Interfaces;
+using FootballStatisticsArchive.Database.Models;
 using Oracle.ManagedDataAccess.Client;
 using System;
-using System.Collections.Generic;
 
 namespace FootballStatisticsArchive.Database.Repositories
 {
@@ -14,7 +14,7 @@ namespace FootballStatisticsArchive.Database.Repositories
 
         private readonly IBaseReposetory baseReposetory;
 
-        public ICollection<object> Registration(string nickname, string email, string password)
+        public DbOutput Registration(string nickname, string email, string password)
         {
             var arg1 = new Tuple<string, OracleDbType, object>("p_nickname", OracleDbType.Varchar2, nickname);
             var arg2 = new Tuple<string, OracleDbType, object>("p_email", OracleDbType.Varchar2, email);

@@ -2,6 +2,7 @@ using FootballStatisticsArchive.Database.Interfaces;
 using FootballStatisticsArchive.Database.Repositories;
 using FootballStatisticsArchive.Services.Interfaces;
 using FootballStatisticsArchive.Services.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,6 +23,11 @@ namespace FootballStatisticsArchive.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/account/login");
+                });
             services.AddTransient<IAccountReposetory, AccountReposetory>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IBaseReposetory ,BaseReposetory>();
@@ -37,6 +43,7 @@ namespace FootballStatisticsArchive.Web
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

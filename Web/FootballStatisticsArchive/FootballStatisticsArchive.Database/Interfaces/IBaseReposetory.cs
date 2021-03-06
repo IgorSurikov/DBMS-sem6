@@ -7,6 +7,6 @@ namespace FootballStatisticsArchive.Database.Interfaces
     public interface IBaseReposetory
     {
         public void SetUpConnectionOptions();
-        public DbOutput RunDbRequest(string funckName, bool mustRespond = false, Tuple<string, OracleDbType, object>[] args = null, Tuple<string, OracleDbType, object> returnVal = null);
+        public DbOutput RunDbRequest(string funckName, bool mustRespond = false, Tuple<string, OracleDbType, object>[] args = null, Tuple<string, OracleDbType> returnVal = null);
     }
 }

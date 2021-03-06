@@ -23,7 +23,7 @@ namespace FootballStatisticsArchive.Database.Repositories
             OracleConfiguration.WalletLocation = OracleConfiguration.TnsAdmin;
         }
 
-        public DbOutput RunDbRequest(string funckName, bool mustRespond=false, Tuple<string, OracleDbType, object>[] args=null, Tuple<string, OracleDbType, object> returnVal=null)
+        public DbOutput RunDbRequest(string funckName, bool mustRespond=false, Tuple<string, OracleDbType, object>[] args=null, Tuple<string, OracleDbType> returnVal=null)
         {
             string connectionString = $"User Id={this.configuration["Authentication:Login"]};Password={this.configuration["Authentication:Password"]};Data Source={this.configuration["Authentication:Schema"]};Connection Timeout=100;";
             var returnVals = new DbOutput();
@@ -44,6 +44,7 @@ namespace FootballStatisticsArchive.Database.Repositories
                         {
                             returnVals.OutElements = new List<object>();
                             cmd.Parameters.Add(returnVal.Item1, returnVal.Item2).Direction = ParameterDirection.Output;
+                            cmd.ExecuteNonQuery();
                             OracleDataReader rdr = cmd.ExecuteReader();
                             while (rdr.Read())
                             {
@@ -53,7 +54,6 @@ namespace FootballStatisticsArchive.Database.Repositories
                                 }
                             }
                         }
-                        cmd.ExecuteNonQuery();
                         returnVals.Result = DbResult.Successed;
                     }
                     catch (Exception ex)
@@ -62,7 +62,7 @@ namespace FootballStatisticsArchive.Database.Repositories
                         returnVals.Result = DbResult.Faild;
                     }
                     finally
-                    {
+                        {
                         con.Close();
                     }
                 }

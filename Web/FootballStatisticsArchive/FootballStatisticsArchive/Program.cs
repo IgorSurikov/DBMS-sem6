@@ -17,6 +17,7 @@ namespace FootballStatisticsArchive.Web
                 IServiceProvider services = scope.ServiceProvider;
                 IConfiguration configuration = services.GetRequiredService<IConfiguration>();
                 var repo = new BaseReposetory(configuration);
+                repo.SetUpConnectionOptions();
             }
             host.Run();
         }

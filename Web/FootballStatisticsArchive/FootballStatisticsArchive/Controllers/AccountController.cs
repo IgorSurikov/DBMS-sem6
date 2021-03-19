@@ -31,6 +31,7 @@ namespace FootballStatisticsArchive.Web.Controllers
             }
             return Ok();
         }
+
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login([FromForm] LoginViewModel vm)

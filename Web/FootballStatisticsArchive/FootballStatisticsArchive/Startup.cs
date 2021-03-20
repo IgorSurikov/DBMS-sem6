@@ -28,9 +28,14 @@ namespace FootballStatisticsArchive.Web
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/account/login");
                 });
+
             services.AddTransient<IAccountReposetory, AccountReposetory>();
+            services.AddTransient<IBaseReposetory, BaseReposetory>();
+            services.AddTransient<ITeamRepository, TeamRepository>();
+            services.AddTransient<ITournamentRepository, TournamentRepository>();
+
             services.AddTransient<IAccountService, AccountService>();
-            services.AddTransient<IBaseReposetory ,BaseReposetory>();
+            services.AddTransient<ITeamService, TeamService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

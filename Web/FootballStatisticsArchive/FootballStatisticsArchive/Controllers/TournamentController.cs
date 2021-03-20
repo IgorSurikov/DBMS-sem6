@@ -42,5 +42,17 @@ namespace FootballStatisticsArchive.Web.Controllers
             }
             return Ok(teams);
         }
+
+        [HttpGet]
+        [Route("{tournamentId}/match")]
+        public IActionResult GetMathces([FromRoute] int tournamentId)
+        {
+            var match = this.tournamentService.GetMatches(tournamentId);
+            if (match == null)
+            {
+                return BadRequest("Error!");
+            }
+            return Ok(match);
+        }
     }
 }

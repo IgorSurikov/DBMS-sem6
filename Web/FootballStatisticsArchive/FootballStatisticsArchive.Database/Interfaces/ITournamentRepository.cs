@@ -8,5 +8,6 @@ namespace FootballStatisticsArchive.Database.Interfaces
     public interface ITournamentRepository
     {
         public DbOutput GetTournaments();
+        public DbOutput GetMatches(int tournamentId);
     }
 }

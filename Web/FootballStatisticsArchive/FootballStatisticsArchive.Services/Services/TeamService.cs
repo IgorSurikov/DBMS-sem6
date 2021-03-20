@@ -40,7 +40,7 @@ namespace FootballStatisticsArchive.Services.Services
                 var team = stuffTeams.First(obj => Convert.ToInt32(obj.ElementAt(1)) == teamId);
                 teams.Add(new Team()
                 {
-                    Id = teamId,
+                    TeamId = teamId,
                     Name = team.ElementAt(2).ToString(),
                     Initial = team.ElementAt(3).ToString(),
                     Players = stuffTeams.Where(obj => Convert.ToInt32(obj.ElementAt(1)) == teamId).Select(playerInfo => new Player()

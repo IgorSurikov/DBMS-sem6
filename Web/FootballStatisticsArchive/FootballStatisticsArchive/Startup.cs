@@ -36,6 +36,7 @@ namespace FootballStatisticsArchive.Web
 
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<ITeamService, TeamService>();
+            services.AddTransient<ITournamentService, TournamentService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

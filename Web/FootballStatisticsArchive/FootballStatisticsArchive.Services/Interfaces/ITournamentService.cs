@@ -8,5 +8,6 @@ namespace FootballStatisticsArchive.Services.Interfaces
     public interface ITournamentService
     {
         public ICollection<Tournament> GetTournaments();
+        public ICollection<Match> GetMatches(int tournamentId);
     }
 }

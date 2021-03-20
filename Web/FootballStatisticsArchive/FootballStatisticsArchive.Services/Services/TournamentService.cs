@@ -64,5 +64,48 @@ namespace FootballStatisticsArchive.Services.Services
             }
             return tournaments;
         }
+        public ICollection<Match> GetMatches(int tournamentId)
+        {
+            var matchesResult = this.tournamentRepository.GetMatches(tournamentId);
+            if(matchesResult.Result == DbResult.Faild)
+            {
+                return null;
+            }
+
+            List<Match> matches = new List<Match>();
+
+            for (int i = 0; i < matchesResult.OutElements.Count; i += 16)
+            {
+                matches.Add(new Match()
+                {
+                    MatchId = Convert.ToInt32(matchesResult.OutElements.ElementAt(i)),
+                    TournamentId = Convert.ToInt32(matchesResult.OutElements.ElementAt(i + 1)),
+                    Date = DateTime.Parse(matchesResult.OutElements.ElementAt(i + 2).ToString()),
+                    Stadium = new Stadium()
+                    {
+                        Name = matchesResult.OutElements.ElementAt(i + 3).ToString(),
+                        City = matchesResult.OutElements.ElementAt(i + 4).ToString()
+                    },
+                    StageName = matchesResult.OutElements.ElementAt(i + 5).ToString(),
+                    HomeTeam = new Team()
+                    {
+                        TeamId = Convert.ToInt32(matchesResult.OutElements.ElementAt(i + 6)),
+                        Name = matchesResult.OutElements.ElementAt(i + 7).ToString(),
+                        Initial = matchesResult.OutElements.ElementAt(i + 8).ToString()
+                    },
+                    HomeTeamGoals = Convert.ToInt32(matchesResult.OutElements.ElementAt(i + 9)),
+                    AwayTeam = new Team()
+                    {
+                        TeamId = Convert.ToInt32(matchesResult.OutElements.ElementAt(i + 10)),
+                        Name = matchesResult.OutElements.ElementAt(i + 11).ToString(),
+                        Initial = matchesResult.OutElements.ElementAt(i + 12).ToString()
+                    },
+                    AwayTeamGoals = Convert.ToInt32(matchesResult.OutElements.ElementAt(i + 13)),
+                    WinConditions = matchesResult.OutElements.ElementAt(i + 14).ToString(),
+                    Referee = matchesResult.OutElements.ElementAt(i + 15).ToString()
+                });
+            }
+            return matches;
+        }
     }
 }

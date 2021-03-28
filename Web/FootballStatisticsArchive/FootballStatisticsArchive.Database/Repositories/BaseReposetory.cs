@@ -54,6 +54,10 @@ namespace FootballStatisticsArchive.Database.Repositories
                                 }
                             }
                         }
+                        else
+                        {
+                            cmd.ExecuteNonQuery();
+                        }
                         returnVals.Result = DbResult.Successed;
                     }
                     catch (Exception ex)

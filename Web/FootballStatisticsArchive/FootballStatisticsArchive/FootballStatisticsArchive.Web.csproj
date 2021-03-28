@@ -6,9 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Новая папка\**" />
+    <Content Remove="Новая папка\**" />
+    <EmbeddedResource Remove="Новая папка\**" />
+    <None Remove="Новая папка\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\FootballStatisticsArchive.Database\FootballStatisticsArchive.Database.csproj" />
     <ProjectReference Include="..\FootballStatisticsArchive.Services\FootballStatisticsArchive.Services.csproj" />
     <ProjectReference Include="..\FootballStatisticsArchive.Views\FootballStatisticsArchive.Views.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\css\" />
   </ItemGroup>
 
 

@@ -32,7 +32,7 @@ namespace FootballStatisticsArchive.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{tournamentId}/teams")]
+        [Route("{tournamentId}/team")]
         public IActionResult GetTeams([FromRoute] int tournamentId)
         {
             var teams = this.teamService.GetTeams(tournamentId);

@@ -2,6 +2,7 @@
 using FootballStatisticsArchive.Database.Models;
 using FootballStatisticsArchive.Services.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FootballStatisticsArchive.Services.Services
@@ -66,6 +67,47 @@ namespace FootballStatisticsArchive.Services.Services
                 }
             };
             return user;
+        }
+
+        public ApplicationUser ChangeRole(int userId, int roleId)
+        {
+            DbOutput dbOut = this.accountRepository.ChangeRole(userId, roleId);
+            if (dbOut.Result == DbResult.Faild)
+            {
+                Console.WriteLine(dbOut.ErrorMessage);
+                return null;
+            }
+            var user = this.GetUser(userId);
+            return user;
+        }
+
+        public ICollection<ApplicationUser> GetAllUsers()
+        {
+            DbOutput dbOut = this.accountRepository.GetAllUsers();
+            if (dbOut.Result == DbResult.Faild)
+            {
+                Console.WriteLine(dbOut.ErrorMessage);
+                return null;
+            }
+
+            List<ApplicationUser> users = new List<ApplicationUser>();
+            for (int i = 0; i < dbOut.OutElements.Count; i+=5)
+            {
+                var user = new ApplicationUser()
+                {
+                    Id = Convert.ToInt32(dbOut.OutElements.ElementAt(i)),
+                    Email = dbOut.OutElements.ElementAt(i + 1).ToString(),
+                    Nickname = dbOut.OutElements.ElementAt(i + 2).ToString(),
+                    UserRole = new Role()
+                    {
+                        Id = Convert.ToInt32(dbOut.OutElements.ElementAt(i + 3)),
+                        Name = dbOut.OutElements.ElementAt(i + 4).ToString()
+                    }
+                };
+                users.Add(user);
+            }
+
+            return users;
         }
     }
 }

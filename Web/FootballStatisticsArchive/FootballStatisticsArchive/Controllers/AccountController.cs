@@ -3,9 +3,11 @@ using FootballStatisticsArchive.Services.Interfaces;
 using FootballStatisticsArchive.Views;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -54,6 +56,30 @@ namespace FootballStatisticsArchive.Web.Controllers
                 Console.WriteLine(ex.Message);
                 return BadRequest(resultLogin);
             }
+        }
+
+        [HttpGet]
+        [Route("users/all")]
+        public IActionResult GetAllUsers()
+        {
+            var users = this.accountService.GetAllUsers();
+            if(users == null)
+            {
+                return BadRequest("There is no users!");
+            }
+            return Ok(users);
+        }
+
+        [HttpPost]
+        [Route("users/update")]
+        public IActionResult ChangeRole([FromForm] ChangeRoleViewModel model)
+        {
+            var result = this.accountService.ChangeRole(model.UserId, model.RoleId);
+            if (result == null)
+            {
+                return BadRequest("Input data is incorrect!");
+            }
+            return Ok(result);
         }
     }
 }

@@ -37,6 +37,19 @@ namespace FootballStatisticsArchive.Database.Repositories
             var returnValArg = new Tuple<string, OracleDbType>("out_user", OracleDbType.RefCursor);
             return this.baseReposetory.RunDbRequest("get_user", mustRespond: true, args: new Tuple<string, OracleDbType, object>[] { arg }, returnValArg);
         }
+
+        public DbOutput ChangeRole(int userId, int roleId)
+        {
+            var arg1 = new Tuple<string, OracleDbType, object>("p_user_id", OracleDbType.Decimal, userId);
+            var arg2 = new Tuple<string, OracleDbType, object>("p_role_id", OracleDbType.Decimal, roleId);
+            return this.baseReposetory.RunDbRequest("post_change_role", args: new Tuple<string, OracleDbType, object>[] { arg1, arg2 });
+        }
+
+        public DbOutput GetAllUsers()
+        {
+            var returnValArg = new Tuple<string, OracleDbType>("out_users", OracleDbType.RefCursor);
+            return this.baseReposetory.RunDbRequest("get_all_users", mustRespond: true, args: new Tuple<string, OracleDbType, object>[] {}, returnVal: returnValArg);
+        }
     }
 }
 

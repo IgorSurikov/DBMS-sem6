@@ -17,10 +17,10 @@ namespace FootballStatisticsArchive.Services.Services
 
         private readonly ITournamentRepository tournamentRepository;
 
-        public ICollection<Tournament> GetTournaments()
+        public ICollection<Tournament> GetTournaments(int year = 0)
         {
             List<Tournament> tournaments = new List<Tournament>();
-            var tournamentResult = this.tournamentRepository.GetTournaments();
+            var tournamentResult = this.tournamentRepository.GetTournaments(year);
             if (tournamentResult.Result == DbResult.Faild)
             {
                 return null;

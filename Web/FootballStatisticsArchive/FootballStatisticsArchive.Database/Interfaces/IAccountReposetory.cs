@@ -9,5 +9,6 @@ namespace FootballStatisticsArchive.Database.Interfaces
         public DbOutput GetUser(int userId);
         public DbOutput ChangeRole(int userId, int roleId);
         public DbOutput GetAllUsers();
+        public DbOutput DeleteUser(int userId);
     }
 }

@@ -50,6 +50,12 @@ namespace FootballStatisticsArchive.Database.Repositories
             var returnValArg = new Tuple<string, OracleDbType>("out_users", OracleDbType.RefCursor);
             return this.baseReposetory.RunDbRequest("get_all_users", mustRespond: true, args: new Tuple<string, OracleDbType, object>[] {}, returnVal: returnValArg);
         }
+
+        public DbOutput DeleteUser(int userId)
+        {
+            var arg1 = new Tuple<string, OracleDbType, object>("p_user_id", OracleDbType.Decimal, userId);
+            return this.baseReposetory.RunDbRequest("post_del_user", args: new Tuple<string, OracleDbType, object>[] { arg1 });
+        }
     }
 }
 

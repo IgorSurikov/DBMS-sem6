@@ -109,5 +109,17 @@ namespace FootballStatisticsArchive.Services.Services
 
             return users;
         }
+
+        public bool DeleteUser(int userId)
+        {
+            DbOutput dbOut = this.accountRepository.DeleteUser(userId);
+            if (dbOut.Result == DbResult.Faild)
+            {
+                Console.WriteLine(dbOut.ErrorMessage);
+                return false;
+            }
+
+            return true;
+        }
     }
 }

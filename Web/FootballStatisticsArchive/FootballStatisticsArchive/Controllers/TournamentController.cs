@@ -32,6 +32,18 @@ namespace FootballStatisticsArchive.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{year}")]
+        public IActionResult GetTournaments([FromRoute]int year)
+        {
+            var tournaments = this.tournamentService.GetTournaments(year);
+            if (tournaments == null)
+            {
+                return BadRequest("Error!");
+            }
+            return Ok(tournaments);
+        }
+
+        [HttpGet]
         [Route("{tournamentId}/team")]
         public IActionResult GetTeams([FromRoute] int tournamentId)
         {

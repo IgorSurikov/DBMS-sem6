@@ -58,10 +58,25 @@ namespace FootballStatisticsArchive.Web.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         [Route("users/all")]
         public IActionResult GetAllUsers()
         {
+            Claim userIdClaim = HttpContext.User.Identities.First().Claims.First();
+            if (userIdClaim.Value == null)
+            {
+                return Unauthorized("You are not logged in!");
+            }
+            var user = this.accountService.GetUser(Convert.ToInt32(userIdClaim.Value));
+            if (user == null)
+            {
+                return BadRequest("Input data is incorrect!");
+            }
+            if (user.UserRole.Name != "ADMIN")
+            {
+                return BadRequest("You are not admin!");
+            }
             var users = this.accountService.GetAllUsers();
             if(users == null)
             {
@@ -70,16 +85,57 @@ namespace FootballStatisticsArchive.Web.Controllers
             return Ok(users);
         }
 
+
+        [Authorize]
         [HttpPost]
         [Route("users/update")]
-        public IActionResult ChangeRole([FromForm] ChangeRoleViewModel model)
+        public IActionResult ChangeRole([FromForm] int roleId = -1)
         {
-            var result = this.accountService.ChangeRole(model.UserId, model.RoleId);
+            if(roleId == -1)
+            {
+                return BadRequest("roleId required!");
+            }
+            Claim userIdClaim = HttpContext.User.Identities.First().Claims.First();
+            if (userIdClaim.Value == null)
+            {
+                return Unauthorized("You mast be logged in!");
+            }
+            var result = this.accountService.ChangeRole(Convert.ToInt32(userIdClaim.Value), roleId);
             if (result == null)
             {
                 return BadRequest("Input data is incorrect!");
             }
             return Ok(result);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("users/delete")]
+        public IActionResult DeleteUser([FromForm] int userId)
+        {
+            if (userId == 0)
+            {
+                return BadRequest("Bad params!");
+            }
+            Claim userIdClaim = HttpContext.User.Identities.First().Claims.First();
+            if(userIdClaim.Value == null)
+            {
+                return Unauthorized("You are not logged in!");
+            }
+            var user = this.accountService.GetUser(Convert.ToInt32(userIdClaim.Value));
+            if (user == null)
+            {
+                return BadRequest("Input data is incorrect!");
+            }
+            if(user.UserRole.Name != "ADMIN")
+            {
+                return BadRequest("You are not admin!");
+            }
+            if(!this.accountService.DeleteUser(userId))
+            {
+                return BadRequest("Not expected error!");
+            }
+            return Ok();
         }
     }
 }

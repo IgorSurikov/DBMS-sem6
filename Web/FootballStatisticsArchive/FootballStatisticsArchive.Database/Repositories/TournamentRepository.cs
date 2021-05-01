@@ -16,11 +16,18 @@ namespace FootballStatisticsArchive.Database.Repositories
 
         private readonly IBaseReposetory baseReposetory;
 
-        public DbOutput GetTournaments()
+        public DbOutput GetTournaments(int year)
         {
             var returnValArg = new Tuple<string, OracleDbType>("out_tournaments", OracleDbType.RefCursor);
+            var arg1 = new Tuple<string, OracleDbType, object>("p_year", OracleDbType.Decimal, null);
 
-            return this.baseReposetory.RunDbRequest("get_tournaments", true, new Tuple<string, OracleDbType, object>[] { }, returnValArg);
+            if (year != 0)
+            {
+                arg1 = new Tuple<string, OracleDbType, object>("p_year", OracleDbType.Decimal, year);
+            }
+
+
+            return this.baseReposetory.RunDbRequest("get_tournaments", true, new Tuple<string, OracleDbType, object>[] { arg1 }, returnValArg);
         }
 
         public DbOutput GetMatches(int tournamentId)

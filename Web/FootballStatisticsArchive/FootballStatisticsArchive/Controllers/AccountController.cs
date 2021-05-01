@@ -58,6 +58,16 @@ namespace FootballStatisticsArchive.Web.Controllers
             }
         }
 
+        [HttpGet]
+        [Authorize]
+        [Route("logout")]
+        public virtual async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            HttpContext.Response.Cookies.Delete(".AspNetCore.Cookies");
+            return Ok();
+        }
+
         [Authorize]
         [HttpGet]
         [Route("users/all")]

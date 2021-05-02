@@ -123,6 +123,23 @@ a {
    box-shadow:0 4px 15px rgba(0,0,0,.2);
    cursor:pointer;
 }
+.btn3{
+   width:220px;
+   height:65px;
+   display:flex;
+   position: absolute;
+   right: 400px;
+   top: 30px;
+   justify-content:center;
+   align-items:center;
+   background-color:#fff;
+   font-size:18px;
+   font-weight:700;
+   border:1px solid rgba(0,0,0,.2);
+   box-shadow:0 4px 15px rgba(0,0,0,.2);
+   cursor:pointer;
+}
+
 
 
  
@@ -339,7 +356,7 @@ a {
     height:65px;
     display:absolute;
     position: absolute;
-    right: 400px;
+    right: 800px;
     top: 50px;
     justify-content:center;
     align-items:center;

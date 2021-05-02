@@ -4,9 +4,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const modalTrigger = document.querySelector('[data-modal]'),
         modalTriggerEnter = document.querySelector('[data-modalenter]'),
         modalTriggerExit = document.querySelector('[data-modalexit]'),
+        modalTriggerUsers = document.querySelector('[data-modalusers]'),
         modal = document.querySelector('.modal'),
         modalEnter = document.querySelector('.modal__enter'),
-        selectMain = document.querySelector(".select-css");
+        selectMain = document.querySelector(".select-css"),
+        sportHeader = document.querySelector(".sport-header");
 
     let tour = null,
         teamName = null,
@@ -30,6 +32,40 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         return await res.json();
     }
+    //Users
+    class Users {
+        constructor(email, nickname, userRole, parentSelector) {
+            this.email = email;
+            this.nickname = nickname;
+            this.userRole = userRole;
+            this.parentSelector = parentSelector;
+            this.parent = document.querySelector(parentSelector);
+        }
+        render() {
+            //document.querySelector(".tabel-match").classList.add("hide");
+            
+            const element = document.createElement('tr');
+           
+            // teamName.forEach(item => {
+            //     item.classList.add('hide');
+            // });
+         
+            element.innerHTML = `
+            <td width="20%">${ this.email}</td>
+            <td width="15%">${this.nickname}</td>
+            <td>${this.userRole.name}</td>
+            <td width="4%"></td>
+            <td width="5%">
+                <span class=""></span>
+            </td>
+            `;
+            
+                
+            this.parent.append(element);
+          
+              
+        }
+    }
     //Team
     class Team {
         constructor( teamId, name, initial, players, parentSelector) {
@@ -45,9 +81,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             const element = document.createElement('tr');
            
-            teamName.forEach(item => {
-                item.classList.add('hide');
-            });
+            // teamName.forEach(item => {
+            //     item.classList.add('hide');
+            // });
          
             element.innerHTML = `
             <td width="21%">${this.name}</td>
@@ -102,7 +138,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 item.classList.add('hide');
             });
             element.innerHTML = `
-          
             <td width="20%">${this.date}</td>
             <td width="15%">${this.stageName}</td>
             <td class="team-name ${this.homeTeam.name} ${this.tournamentId}" width="15%">${this.homeTeam.name}</td>
@@ -151,6 +186,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     //Tour
     tour.forEach(item => {
         item.addEventListener('click', async(e) => {
+            document.querySelector(".tabel-match").classList.remove("hide");
             //window.location.href=`/${item.classList.item(1)}/match`;
             const relNew = await getResource(`tournament/${item.classList.item(1)}/match`)
             .then(data => {
@@ -169,6 +205,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     function teamNameNow(){
         teamName.forEach(item => {
             item.addEventListener('click', async(e) => {  
+                document.querySelector(".team-match").classList.remove("hide");
                 //window.location.href=`/${item.classList.item(1)}/match`;
                 const relNew = await getResource(`tournament/${item.classList.item(2)}/team`)
                 .then(data => {
@@ -192,15 +229,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         i++;
         const n = selectMain.options.selectedIndex;
-
+        tour.forEach(item => {
+            item.classList.remove('hide');
+        });
         const relNew = await getResource(`tournament/${Number(selectMain.options[n].text)}`)
         .then(data => {
             const tourDel = document.querySelectorAll(".tour-ect");
             data.forEach(({name, tournamentId}) => {
-               
                 tour.forEach(item => {
-                    console.log(item.tournamentId);
-                    if(item.classList[1] != data.tournamentId){
+                    if(item.classList[1] != tournamentId){
                         item.classList.add('hide');
                     }
                 });
@@ -257,8 +294,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             const formData = new FormData(formCheck);
 
             postData('account/login', formData)
-                .then(data => {
+                .then(data =>  {
                     if (data.status == 200) {
+                        adminChek();
                         showThanksModal(messageEnter.success);
                         statusMessage.remove();
                         closeModalEnter();
@@ -397,9 +435,40 @@ document.addEventListener('DOMContentLoaded', async () => {
         
        
     });
+    //AdminChek
+    async function adminChek(){
+        let res = await fetch('account/users/admin');
+        if (!res.ok) {
+            throw new Error(`Could not fetch ${'account/users/admin'}, status: ${res.status}`);
+        }
+        modalTriggerUsers.classList.remove("hide");
+    } 
 
+    //AdminMain
+    modalTriggerUsers.addEventListener('click', async(e) => {
+        selectMain.classList.add("hide");
+            tour.forEach(item => {
+                item.classList.add('hide');
+        });
+        const relNew = await getResource(`account/users/all`)
+                .then(data => {
+                    data.forEach(({email, nickname, userRole}) => {
+                        new Users(email, nickname, userRole, ".tble-users").render();
+                        
+                    });
+                });
+    });
+    //Header
+    sportHeader.addEventListener('click', async(e) => {
+        selectMain.classList.remove("hide");
+        tour.forEach(item => {
+            item.classList.remove('hide');
+        });
+        document.querySelector(".tabel-match").innerHTML = "";
+        document.querySelector(".team-match").innerHTML = "";
+        document.querySelector(".tble-users").innerHTML = "";
+    });
     //Tour
-
 
     // const addForm = document.querySelector('form');
     // const message = {

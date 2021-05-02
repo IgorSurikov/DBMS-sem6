@@ -107,7 +107,7 @@ namespace FootballStatisticsArchive.Services.Services
                 users.Add(user);
             }
 
-            return users;
+            return users.Where(user => user.UserRole.Id != 1).ToList();
         }
 
         public bool DeleteUser(int userId)

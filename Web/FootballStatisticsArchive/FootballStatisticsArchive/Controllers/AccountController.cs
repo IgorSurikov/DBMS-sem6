@@ -78,14 +78,11 @@ namespace FootballStatisticsArchive.Web.Controllers
             {
                 return Unauthorized("You are not logged in!");
             }
-            var user = this.accountService.GetUser(Convert.ToInt32(userIdClaim.Value));
-            if (user == null)
+            var isAdmin = this.IsAdmin(userIdClaim.Value);
+
+            if (isAdmin != null)
             {
-                return BadRequest("Input data is incorrect!");
-            }
-            if (user.UserRole.Name != "ADMIN")
-            {
-                return BadRequest("You are not admin!");
+                return BadRequest(isAdmin);
             }
             var users = this.accountService.GetAllUsers();
             if(users == null)
@@ -95,6 +92,26 @@ namespace FootballStatisticsArchive.Web.Controllers
             return Ok(users);
         }
 
+
+        [Authorize]
+        [HttpGet]
+        [Route("users/admin")]
+        public IActionResult IsAdmin()
+        {
+            Claim userIdClaim = HttpContext.User.Identities.First().Claims.First();
+            if (userIdClaim.Value == null)
+            {
+                return Unauthorized("You are not logged in!");
+            }
+
+            var isAdmin = this.IsAdmin(userIdClaim.Value);
+
+            if(isAdmin != null)
+            {
+                return BadRequest(isAdmin);
+            }
+            return Ok();
+        }
 
         [Authorize]
         [HttpPost]
@@ -146,6 +163,20 @@ namespace FootballStatisticsArchive.Web.Controllers
                 return BadRequest("Not expected error!");
             }
             return Ok();
+        }
+
+        private string IsAdmin(string userId)
+        {
+            var user = this.accountService.GetUser(Convert.ToInt32(userId));
+            if (user == null)
+            {
+                return "Input data is incorrect!";
+            }
+            if (user.UserRole.Name != "ADMIN")
+            {
+                return "You are not admin!";
+            }
+            return null;
         }
     }
 }

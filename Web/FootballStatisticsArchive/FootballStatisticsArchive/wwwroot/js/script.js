@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <td class="team-name ${this.homeTeam.name} ${this.tournamentId}" width="15%">${this.homeTeam.name}</td>
             <td width="10%">${this.homeTeamGoals} - ${this.awayTeamGoals}</td>
             <td class="team-name ${this.awayTeam.name} ${this.tournamentId}">${this.awayTeam.name}</td>
-            <td width="4%"></td>
+            <td width="4%">${this.stadium.name}(${this.stadium.city})</td>
             <td width="5%">
                 <span class=""></span>
             </td>
@@ -188,6 +188,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     //Tour
     tour.forEach(item => {
         item.addEventListener('click', async(e) => {
+            
+            document.querySelector(".tabel-match").classList.remove("hide");
             document.querySelector(".tabel-match").classList.remove("hide");
             //window.location.href=`/${item.classList.item(1)}/match`;
             const relNew = await getResource(`tournament/${item.classList.item(1)}/match`)
@@ -211,7 +213,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 //window.location.href=`/${item.classList.item(1)}/match`;
                 const relNew = await getResource(`tournament/${item.classList.item(2)}/team`)
                 .then(data => {
-                    data.forEach(({teamId, name, initial, players}) => {
+                    data.forEach(({teamId, name, initial, players, }) => {
                         if(item.classList.item(1) == name){
                             new Team( teamId, name, initial, players, ".team-match").render();
                         }
@@ -450,6 +452,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     //AdminMain
     modalTriggerUsers.addEventListener('click', async(e) => {
+        document.querySelector(".tble-users").classList.remove("hide");
         selectMain.classList.add("hide");
             tour.forEach(item => {
                 item.classList.add('hide');

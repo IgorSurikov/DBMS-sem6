@@ -34,7 +34,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     //Users
     class Users {
-        constructor(email, nickname, userRole, parentSelector) {
+        constructor(id, email, nickname, userRole, parentSelector) {
+            this.id = id;
             this.email = email;
             this.nickname = nickname;
             this.userRole = userRole;
@@ -43,24 +44,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         render() {
             //document.querySelector(".tabel-match").classList.add("hide");
-            
+            document.querySelector(".tabel-match").innerHTML = "";
+            document.querySelector(".team-match").innerHTML = "";
             const element = document.createElement('tr');
-           
+            
             // teamName.forEach(item => {
             //     item.classList.add('hide');
             // });
          
             element.innerHTML = `
-            <td width="20%">${ this.email}</td>
+            <td width="20%">${this.email}</td>
             <td width="15%">${this.nickname}</td>
-            <td>${this.userRole.name}</td>
-            <td width="4%"></td>
+            <td width="20%">
+                    <input class="input-ch ${this.id}" type="text"  name="Role" placeholder="${this.userRole.name}"/>
+                    <button class="btn-ch ${this.id}" type="submit">Изменить</button>
+            </td>
             <td width="5%">
-                <span class=""></span>
+                <button class="btn-delete ${this.id}">Удалить</button>
             </td>
             `;
-            
-                
             this.parent.append(element);
           
               
@@ -68,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     //Team
     class Team {
-        constructor( teamId, name, initial, players, parentSelector) {
+        constructor(teamId, name, initial, players, parentSelector) {
             this.teamId = teamId;
             this.name = name;
             this.initial = initial;
@@ -96,7 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if(shirtNumber == 0){
                     elementNew.innerHTML = `
                     <td width="20%">${name}</td>
-                    <td width="15%">Данные утеряны </td>
+                    <td width="15%">-</td>
                     ` ;
                 } else{
                     elementNew.innerHTML = `
@@ -440,8 +442,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         let res = await fetch('account/users/admin');
         if (!res.ok) {
             throw new Error(`Could not fetch ${'account/users/admin'}, status: ${res.status}`);
+        } else {
+            modalTriggerUsers.classList.remove("hide");
         }
-        modalTriggerUsers.classList.remove("hide");
+        
     } 
 
     //AdminMain
@@ -452,12 +456,57 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
         const relNew = await getResource(`account/users/all`)
                 .then(data => {
-                    data.forEach(({email, nickname, userRole}) => {
-                        new Users(email, nickname, userRole, ".tble-users").render();
-                        
+                    data.forEach(({id, email, nickname, userRole}) => {
+                        new Users(id, email, nickname, userRole, ".tble-users").render();
                     });
                 });
+        setTimeout(deleteBtn(), 2000);
+
     });
+    //Delete
+    function deleteBtn(){
+        const btnDelete = document.querySelectorAll(".btn-delete");
+        const btnCh = document.querySelectorAll('.btn-ch');
+        const inputCh = document.querySelectorAll('.input-ch');
+        btnDelete.forEach(item => {
+            item.addEventListener('click', async(e) => {
+                const formCheck = new FormData();
+                formCheck.append('userId', item.classList[1]);
+                let res = await fetch("account/users/delete", {
+                    method: "POST",
+                    body: formCheck
+                });
+            });
+        });
+        btnCh.forEach(item => {
+            item.addEventListener('click', (e) => {
+                inputCh.forEach(i => {
+                    if(item.classList[1] == i.classList[1]){
+                        let formCh = new FormData();
+                        formCh.append('UserId', i.classList[1]);
+                        if(i.value == "ADMIN" || i.value == "admin"){
+                            formCh.append('RoleID', 1);
+                            console.log(1);    
+                        } else{
+                            formCh.append('RoleID', 0);
+                            console.log(0);    
+                        }                
+                        
+                        let res = fetch("account/users/update", {
+                            method: "POST",
+                            body: formCh
+                        });
+                    }
+                });
+                
+                // 
+                // console.log(formCh);
+            });
+        });
+      
+    }
+   
+   
     //Header
     sportHeader.addEventListener('click', async(e) => {
         selectMain.classList.remove("hide");

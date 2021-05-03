@@ -139,7 +139,19 @@ a {
    box-shadow:0 4px 15px rgba(0,0,0,.2);
    cursor:pointer;
 }
-
+.btn-delete{
+   width:100px;
+   height:40px;
+   display:block;
+   justify-content:center;
+   align-items:center;
+   background-color:#fff;
+   font-size:18px;
+   font-weight:700;
+   border:1px solid rgba(0,0,0,.2);
+   box-shadow:0 4px 15px rgba(0,0,0,.2);
+   cursor:pointer;
+}
 
 
  

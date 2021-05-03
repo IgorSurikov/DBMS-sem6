@@ -116,9 +116,9 @@ namespace FootballStatisticsArchive.Web.Controllers
         [Authorize]
         [HttpPost]
         [Route("users/update")]
-        public IActionResult ChangeRole([FromForm] int roleId = -1)
+        public IActionResult ChangeRole([FromForm] ChangeRoleViewModel model)
         {
-            if(roleId == -1)
+            if(model.RoleId == -1)
             {
                 return BadRequest("roleId required!");
             }
@@ -127,7 +127,13 @@ namespace FootballStatisticsArchive.Web.Controllers
             {
                 return Unauthorized("You mast be logged in!");
             }
-            var result = this.accountService.ChangeRole(Convert.ToInt32(userIdClaim.Value), roleId);
+            var isAdmin = this.IsAdmin(userIdClaim.Value);
+            if (isAdmin != null)
+            {
+                return BadRequest(isAdmin);
+
+            }
+            var result = this.accountService.ChangeRole(model.UserId, model.RoleId);
             if (result == null)
             {
                 return BadRequest("Input data is incorrect!");
@@ -138,9 +144,9 @@ namespace FootballStatisticsArchive.Web.Controllers
         [Authorize]
         [HttpPost]
         [Route("users/delete")]
-        public IActionResult DeleteUser([FromForm] int userId)
+        public IActionResult DeleteUser([FromForm] int userId = -1)
         {
-            if (userId == 0)
+            if (userId == -1)
             {
                 return BadRequest("Bad params!");
             }
@@ -149,14 +155,11 @@ namespace FootballStatisticsArchive.Web.Controllers
             {
                 return Unauthorized("You are not logged in!");
             }
-            var user = this.accountService.GetUser(Convert.ToInt32(userIdClaim.Value));
-            if (user == null)
+            var isAdmin = this.IsAdmin(userIdClaim.Value);
+            if(isAdmin != null)
             {
-                return BadRequest("Input data is incorrect!");
-            }
-            if(user.UserRole.Name != "ADMIN")
-            {
-                return BadRequest("You are not admin!");
+                return BadRequest(isAdmin);
+
             }
             if(!this.accountService.DeleteUser(userId))
             {

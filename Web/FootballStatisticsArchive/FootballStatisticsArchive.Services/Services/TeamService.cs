@@ -28,9 +28,9 @@ namespace FootballStatisticsArchive.Services.Services
             List<Team> teams = new List<Team>();
             List<List<object>> stuffTeams = new List<List<object>>();
 
-            for (int i = 0; i < teamGetResult.OutElements.Count; i += 8)
+            for (int i = 0; i < teamGetResult.OutElements.Count; i += 9)
             {
-                stuffTeams.Add(teamGetResult.OutElements.Skip(i).Take(8).ToList());
+                stuffTeams.Add(teamGetResult.OutElements.Skip(i).Take(9).ToList());
             }
 
             var teamIds = stuffTeams.Select(obj => obj.ElementAt(1)).GroupBy(s => s).Select(obj => Convert.ToInt32(obj.Key)).ToList();
@@ -48,8 +48,9 @@ namespace FootballStatisticsArchive.Services.Services
                         id = Convert.ToInt32(playerInfo.ElementAt(5)),
                         Name = playerInfo.ElementAt(6).ToString(),
                         ShirtNumber = Convert.ToInt32(playerInfo.ElementAt(7))
-                    }).ToList()
-                }); ;
+                    }).ToList(),
+                    CoachName = team.ElementAt(8).ToString()
+                });
             }
 
             return teams;

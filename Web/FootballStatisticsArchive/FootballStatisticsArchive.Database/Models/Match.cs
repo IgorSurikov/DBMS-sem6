@@ -17,6 +17,8 @@ namespace FootballStatisticsArchive.Database.Models
         public Team AwayTeam { get; set; }
         public int AwayTeamGoals { get; set; }
         public string WinConditions { get; set; }
-        public string Referee { get; set; }
+        public string RefereeName { get; set; }
+        public string RefereeAssistant1Name { get; set; }
+        public string RefereeAssistant2Name { get; set; }
     }
 }

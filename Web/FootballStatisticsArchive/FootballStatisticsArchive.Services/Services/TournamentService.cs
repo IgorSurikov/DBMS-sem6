@@ -74,7 +74,7 @@ namespace FootballStatisticsArchive.Services.Services
 
             List<Match> matches = new List<Match>();
 
-            for (int i = 0; i < matchesResult.OutElements.Count; i += 16)
+            for (int i = 0; i < matchesResult.OutElements.Count; i += 18)
             {
                 matches.Add(new Match()
                 {
@@ -102,7 +102,9 @@ namespace FootballStatisticsArchive.Services.Services
                     },
                     AwayTeamGoals = Convert.ToInt32(matchesResult.OutElements.ElementAt(i + 13)),
                     WinConditions = matchesResult.OutElements.ElementAt(i + 14).ToString(),
-                    Referee = matchesResult.OutElements.ElementAt(i + 15).ToString()
+                    RefereeName = matchesResult.OutElements.ElementAt(i + 15).ToString(),
+                    RefereeAssistant1Name = matchesResult.OutElements.ElementAt(i + 16).ToString(),
+                    RefereeAssistant2Name = matchesResult.OutElements.ElementAt(i + 17).ToString(),
                 });
             }
             return matches;

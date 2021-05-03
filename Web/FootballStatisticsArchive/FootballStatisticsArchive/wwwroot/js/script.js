@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <button class="btn-ch ${this.id}" type="submit">Изменить</button>
             </td>
             <td width="5%">
-                <button class="btn-delete ${this.id}">Удалить</button>
+                <button class="btn-delete ${this.id} ${this.userRole.id}">Удалить</button>
             </td>
             `;
             this.parent.append(element);
@@ -460,6 +460,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                         new Users(id, email, nickname, userRole, ".tble-users").render();
                     });
                 });
+        const btnDeleteNew = document.querySelectorAll(".btn-delete");   
+        btnDeleteNew.forEach(item => {
+            if(item.classList[2] == 1){
+                item.classList.add("hide");
+            }
+            if(item.classList[1] == 1){
+                item.classList.add("hide");
+            }
+        });
         setTimeout(deleteBtn(), 2000);
 
     });
